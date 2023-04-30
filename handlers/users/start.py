@@ -33,7 +33,7 @@ async def bot_start(message: types.Message,state: FSMContext):
                           phone=None,
                           addphone=None,
                           malumot=None,
-                          tugatgan_oliy=None,
+                          manzil=None,
                           oilaviy_holat=None,
                           sud_holat=None,
                           company=None,

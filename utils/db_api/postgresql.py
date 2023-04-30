@@ -54,7 +54,7 @@ class Database:
         phone VARCHAR(255) NULL,
         addphone VARCHAR(255) NULL,
         malumot VARCHAR(255) NULL,
-        tugatgan_oliy VARCHAR(255) NULL,
+        manzil VARCHAR(255) NULL,
         oilaviy_holat VARCHAR(100) NULL,
         sud_holat VARCHAR(100) NULL,
         day timestamp default NULL,
@@ -80,12 +80,12 @@ class Database:
         return sql, tuple(parameters.values())
 
 
-    async def add_user(self, telegram_id, language, fullname, date, phone, addphone, malumot, tugatgan_oliy, oilaviy_holat, sud_holat,
+    async def add_user(self, telegram_id, language, fullname, date, phone, addphone, malumot, manzil, oilaviy_holat, sud_holat,
                        day, company, new_company, last_summa,new_summa, time_job, know_lang,know_lang_degree,abaut_as):
-        sql = "INSERT INTO HRBOT.Resume (telegram_id, language, fullname, date, phone, addphone, malumot, tugatgan_oliy, oilaviy_holat, sud_holat," \
+        sql = "INSERT INTO HRBOT.Resume (telegram_id, language, fullname, date, phone, addphone, malumot, manzil, oilaviy_holat, sud_holat," \
               "day, company, new_company, last_summa,new_summa, time_job, know_lang,know_lang_degree,abaut_as) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19) "\
                 "ON CONFLICT (telegram_id) DO NOTHING RETURNING *"
-        return await self.execute(sql, telegram_id, language, fullname, date, phone, addphone, malumot, tugatgan_oliy, oilaviy_holat, sud_holat,
+        return await self.execute(sql, telegram_id, language, fullname, date, phone, addphone, malumot, manzil, oilaviy_holat, sud_holat,
                        day, company, new_company, last_summa,new_summa, time_job, know_lang,know_lang_degree,abaut_as, fetchrow=True)
 
 
@@ -119,9 +119,9 @@ class Database:
         return await self.execute(sql, fetchval=True)
 
 
-    async def update_user_full(self, fullname, date, phone, addphone, malumot, tugatgan_oliy, oilaviy_holat, sud_holat,day, company, new_company, last_summa,new_summa, time_job, know_lang,know_lang_degree,abaut_as,telegram_id):
-        sql = "UPDATE HRBOT.Resume SET fullname=$1, date=$2, phone=$3, addphone=$4, malumot=$5, tugatgan_oliy=$6, oilaviy_holat=$7, sud_holat=$8, day=$9, company=$10, new_company=$11, last_summa=$12,new_summa=$13, time_job=$14, know_lang=$15,know_lang_degree=$16,abaut_as=$17 WHERE telegram_id=$18"
-        return await self.execute(sql, fullname, date, phone, addphone, malumot, tugatgan_oliy, oilaviy_holat, sud_holat,day, company, new_company, last_summa,new_summa, time_job, know_lang,know_lang_degree,abaut_as,telegram_id, execute=True)
+    async def update_user_full(self, fullname, date, phone, addphone, malumot, manzil, oilaviy_holat, sud_holat,day, company, new_company, last_summa,new_summa, time_job, know_lang,know_lang_degree,abaut_as,telegram_id):
+        sql = "UPDATE HRBOT.Resume SET fullname=$1, date=$2, phone=$3, addphone=$4, malumot=$5, manzil=$6, oilaviy_holat=$7, sud_holat=$8, day=$9, company=$10, new_company=$11, last_summa=$12,new_summa=$13, time_job=$14, know_lang=$15,know_lang_degree=$16,abaut_as=$17 WHERE telegram_id=$18"
+        return await self.execute(sql, fullname, date, phone, addphone, malumot, manzil, oilaviy_holat, sud_holat,day, company, new_company, last_summa,new_summa, time_job, know_lang,know_lang_degree,abaut_as,telegram_id, execute=True)
 
 
     async def update_user_name(self, name, telegram_id):

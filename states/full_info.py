@@ -6,7 +6,7 @@ class Full_info_user(StatesGroup):
     phone = State()
     addphone = State()
     malumot = State()
-    tugatgan_oliy = State()
+    manzil = State()
     oilaviy_holat = State()
     sud_holat = State()
     qiziqish = State()

@@ -7,6 +7,7 @@ import os
 from datetime import datetime
 from loader import dp, db, bot
 from messages.btn_text.btn_text import *
+from messages.funcs.check_user import check_user
 from messages.funcs.get_keyboard_default import get_markup_default, get_markup_default_phone
 from messages.funcs.get_keyboard_inline import get_markup_inline
 from messages.funcs.get_language import get_language
@@ -14,16 +15,36 @@ from messages.message_txt.message_text import *
 from states.full_info import Full_info_user
 from data.config import channel_id
 from keyboards.inline.know_lang import get_kb, get_markup
+from keyboards.default.jobs_button import get_jobs_button
 
 know_lan = []
 
 
 @dp.message_handler(text=["📝 Ariza qoldirish", "📝 Оставить заявку"])
 async def get_name(message: types.Message):
+    if await check_user(user_id=message.from_user.id) == False:
+        await db.add_user(telegram_id=message.from_user.id,
+                          language='uz',
+                          fullname=None,
+                          date=None,
+                          day=None,
+                          phone=None,
+                          addphone=None,
+                          malumot=None,
+                          manzil=None,
+                          oilaviy_holat=None,
+                          sud_holat=None,
+                          company=None,
+                          new_company=None,
+                          last_summa=None,new_summa=None,time_job=None, know_lang=None,know_lang_degree=None,
+                          abaut_as=None)
+
     language = await get_language(message.from_user.id)
-    know_lang_txt_btn[language].clear()
-    for value in know_lang_txt_btn1[language]:
-        know_lang_txt_btn[language].append(value)
+    if language is None:
+        language = 'uz'
+    # know_lang_txt_btn[language].clear()
+    # for value in know_lang_txt_btn1[language]:
+    #     know_lang_txt_btn[language].append(value)
     await message.answer(name_txt[language], reply_markup=types.ReplyKeyboardRemove())
     await Full_info_user.fullname.set()
 
@@ -68,14 +89,14 @@ async def get_name(message: types.Message, state: FSMContext):
 async def get_name(message: types.Message, state: FSMContext):
     language = await get_language(message.from_user.id)
     await state.update_data(malumot=message.text)
-    await message.answer(tugatgan_txt[language], reply_markup=types.ReplyKeyboardRemove())
-    await Full_info_user.tugatgan_oliy.set()
+    await message.answer(manzil_txt[language], reply_markup=types.ReplyKeyboardRemove())
+    await Full_info_user.manzil.set()
 
 
-@dp.message_handler(content_types=['text'], state=Full_info_user.tugatgan_oliy)
+@dp.message_handler(content_types=['text'], state=Full_info_user.manzil)
 async def get_name(message: types.Message, state: FSMContext):
     language = await get_language(message.from_user.id)
-    await state.update_data(tugatgan_oliy=message.text)
+    await state.update_data(manzil=message.text)
     await message.answer(oilaviy_holat_txt[language],
                          reply_markup=await get_markup_default(language, oilaviy_holat_txt_btn))
     await Full_info_user.oilaviy_holat.set()
@@ -127,9 +148,9 @@ async def get_name(message: types.Message, state: FSMContext):
 async def get_name(message: types.Message, state: FSMContext):
     language = await get_language(message.from_user.id)
     await state.update_data(company=message.text)
-    await state.update_data(newcompany="None")
-    await message.answer(last_summa_txt[language], reply_markup=types.ReplyKeyboardRemove())
-    await Full_info_user.last_summa.set()
+    
+    await message.answer(newcompany_txt[language], reply_markup= await get_jobs_button(language))
+    await Full_info_user.newcompany.set()
 
 
 @dp.message_handler(content_types=['text'], state=Full_info_user.newcompany)
@@ -218,7 +239,7 @@ async def get_name(query: types.CallbackQuery, state: FSMContext):
     phone = data.get('phone')
     addphone = data.get('addphone')
     malumot = data.get('malumot')
-    tugatgan_oliy = data.get('tugatgan_oliy')
+    manzil = data.get('manzil')
     oilaviy_holat = data.get('oilaviy_holat')
     sud_holat = data.get('sud_holat')
     company = data.get('company')
@@ -246,7 +267,7 @@ async def get_name(query: types.CallbackQuery, state: FSMContext):
         document.add_paragraph(f"Telefon raqami:  {phone}", style='Body Text')
         document.add_paragraph(f"Qo'shimcha tel:  {addphone}", style='Body Text')
         document.add_paragraph(f"Ma'lumoti:  {malumot}", style='Body Text')
-        document.add_paragraph(f"Tugatgan ta'lim muassasasi:  {tugatgan_oliy}", style='Body Text')
+        document.add_paragraph(f"Yashash manzili:  {manzil}", style='Body Text')
         document.add_paragraph(f"Oilaviy axvoli:  {oilaviy_holat}", style='Body Text')
         document.add_paragraph(f"Sudlanganmi:  {sud_holat}", style='Body Text')
         document.add_paragraph(f"ISH HAQIDA MA'LUMOT: ", style='Body Text').alignment = 1
@@ -280,7 +301,7 @@ async def get_name(query: types.CallbackQuery, state: FSMContext):
                                       phone=phone,
                                       addphone=addphone,
                                       malumot=malumot,
-                                      tugatgan_oliy=tugatgan_oliy,
+                                      manzil=manzil,
                                       oilaviy_holat=oilaviy_holat,
                                       sud_holat=sud_holat,
                                       day=datetime.now(),
@@ -331,7 +352,7 @@ async def get_name(query: types.CallbackQuery, state: FSMContext):
         document.add_paragraph(f"Ваш номер телефона:  {phone}", style='Body Text')
         document.add_paragraph(f"Дополнительный тел:  {addphone}", style='Body Text')
         document.add_paragraph(f"Ваша информация:  {malumot}", style='Body Text')
-        document.add_paragraph(f"Окончил учебное заведение:  {tugatgan_oliy}", style='Body Text')
+        document.add_paragraph(f"Адрес проживания::  {manzil}", style='Body Text')
         document.add_paragraph(f"Семейный статус:  {oilaviy_holat}", style='Body Text')
         document.add_paragraph(f"Вы были осуждены:  {sud_holat}", style='Body Text')
         document.add_paragraph(f"ИНФОРМАЦИЯ О РАБОТЕ: ", style='Body Text').alignment = 1
@@ -367,7 +388,7 @@ async def get_name(query: types.CallbackQuery, state: FSMContext):
                                       phone=phone,
                                       addphone=addphone,
                                       malumot=malumot,
-                                      tugatgan_oliy=tugatgan_oliy,
+                                      manzil=manzil,
                                       oilaviy_holat=oilaviy_holat,
                                       sud_holat=sud_holat,
                                       day=datetime.now(),

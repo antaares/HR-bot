@@ -47,9 +47,9 @@ malumot_txt = {
     "ru": "Откуда вы знаете?"
 }
 
-tugatgan_txt = {
-    "uz": "Qachon va qaysi oʻquv yurtini tamomlagansiz?",
-    "ru": "Когда и какую школу вы закончили?"
+manzil_txt = {
+    "uz": "Yashash manzilingizni kiriting:",
+    "ru": "Введите свой адрес проживания:"
 }
 
 oilaviy_holat_txt = {
