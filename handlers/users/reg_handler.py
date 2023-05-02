@@ -252,7 +252,7 @@ async def get_name(query: types.CallbackQuery, state: FSMContext):
     know_lang_degree = data.get('know_lang_degree')
     nima_uchun = data.get('nima_uchun')
     about_us = data.get('about_us')
-    know_lang = ','.join(array)
+    know_lang = "None"
 
     document = Document()
     document.add_picture(f'image_{query.from_user.id}.jpg', width=Inches(1.25))
