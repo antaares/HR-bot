@@ -115,16 +115,16 @@ async def get_name(message: types.Message, state: FSMContext):
 async def get_name(message: types.Message, state: FSMContext):
     language = await get_language(message.from_user.id)
     await state.update_data(sud_holat=message.text)
-    await message.answer(qiziqishlari[language], reply_markup=types.ReplyKeyboardRemove())
-    await Full_info_user.qiziqish.set()
+    await message.answer(rasm_txt[language], reply_markup=types.ReplyKeyboardRemove())
+    await Full_info_user.photo.set()
 
 
 @dp.message_handler(content_types=['text'], state=Full_info_user.qiziqish)
 async def get_name(message: types.Message, state: FSMContext):
     language = await get_language(message.from_user.id)
     await state.update_data(qiziqish=message.text)
-    await message.answer(chidamli[language])
-    await Full_info_user.chidam.set()
+    await message.answer(rasm_txt[language])
+    await Full_info_user.photo.set()
 
 
 @dp.message_handler(content_types=['text'], state=Full_info_user.chidam)
@@ -140,6 +140,7 @@ async def get_name(message: types.Message, state: FSMContext):
     language = await get_language(message.from_user.id)
     await message.photo[-1].download(destination_file=f'handlers/users/image_{message.from_user.id}.jpg')
     await message.photo[-1].download(destination_file=f'image_{message.from_user.id}.jpg')
+    await state.update_data(chidam="None")
     await message.answer(company_txt[language])
     await Full_info_user.company.set()
 
@@ -181,9 +182,9 @@ async def get_name(message: types.Message, state: FSMContext):
 async def get_name(message: types.Message, state: FSMContext):
     language = await get_language(message.from_user.id)
     await state.update_data(time_jobs=message.text)
-    await message.answer(know_lang_change_txt[language], reply_markup=types.ReplyKeyboardRemove())
-    await message.answer(know_lang_txt[language], reply_markup=await get_markup(know_lang_txt_btn[language]))
-    await Full_info_user.know_lang.set()
+    await message.answer(about_us_txt[language], reply_markup=types.ReplyKeyboardRemove())
+    # await message.answer(know_lang_txt[language], reply_markup=await get_markup(know_lang_txt_btn[language]))
+    await Full_info_user.about_us.set()
 
 
 @dp.callback_query_handler(state=Full_info_user.know_lang)
