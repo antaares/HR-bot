@@ -150,8 +150,8 @@ async def get_name(message: types.Message, state: FSMContext):
     language = await get_language(message.from_user.id)
     await state.update_data(company=message.text)
     
-    await message.answer(newcompany_txt[language], reply_markup= await get_jobs_button(language))
-    await Full_info_user.newcompany.set()
+    await message.answer(last_summa_txt[language], reply_markup= types.ReplyKeyboardRemove())
+    await Full_info_user.last_summa.set()
 
 
 @dp.message_handler(content_types=['text'], state=Full_info_user.newcompany)
